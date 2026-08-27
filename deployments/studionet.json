@@ -13,8 +13,12 @@
     "submit_observation": "0xbd819d6407fc38bc05583c7ceae710c739024de5d6abaf847271e3f46fdf6fe2",
     "classify_observation": "0x656be9ca67a3dc672d33c2290b6a71146d4718543c87f4f64eb09de032e40302",
     "request_cancellation": "0xa676c57a2944b90b4104ff51470cfa57b19ac48585204f71670ae08b62f4154a",
-    "settle": "0xaeb379e3d4240490beb5424aaa6f5545aad30bf1a6105a2d5f546aff4425b4df"
+    "settle": "0xaeb379e3d4240490beb5424aaa6f5545aad30bf1a6105a2d5f546aff4425b4df",
+    "negative_settle_replay": "0xff9e7abee9be2c21155eaea0d3b3263974e1d6bfdfc813178b042b43f5a39dd6",
+    "negative_cancel_non_subscriber": "0x8678212ce0dc50d1c470b64ef2a0bf13d763fc56d7cb6373ad7f859fcfe49b92",
+    "negative_wrong_value": "0xd8a5b315a5cd0e0e8ad2c903b6646f49900fd6622c2988dc959c550f7b0c85fb",
+    "negative_classify_replay": "0x2e7d3df57505c5ff6c79cc492f0f73fdb1f481ac439b98567e2d6612e7dc724d"
   },
   "readback": null,
-  "notes": "Deployment and lifecycle transaction hashes were independently read from the public GenLayer Explorer transaction API for this deployment. The lifecycle reached settlement. Readback RPC output was not captured in this run, so no final state values are claimed. Partial/full refund, unauthorized, wrong-value, replay, and balance-delta scenarios remain to be exercised on-chain."
+  "notes": "Deployment, lifecycle, and negative-test transaction hashes were independently read from the public GenLayer Explorer transaction API for this deployment. The lifecycle reached settlement. Negative calls were accepted for consensus processing; Explorer API did not expose decoded return strings in this run. Readback RPC output and balance deltas were not captured. Partial/full refund scenarios remain to be exercised on-chain."
 }
