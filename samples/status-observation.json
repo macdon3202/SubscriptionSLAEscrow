@@ -1,0 +1,8 @@
+{
+  "service": "Example RPC",
+  "incident_id": "incident-2026-08-27-01",
+  "started_at": "2026-08-27T03:00:00Z",
+  "resolved_at": "2026-08-27T03:47:00Z",
+  "status": "resolved",
+  "summary": "RPC requests returned elevated 5xx errors during the incident window."
+}

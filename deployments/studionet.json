@@ -1,0 +1,23 @@
+{
+  "network": "studionet",
+  "chain_id": 61999,
+  "contract_address": "0x0C5059BA47A9994103bEe6eb8c5B0D65B6bdA701",
+  "source_file": "contracts/SubscriptionSLAEscrow.py",
+  "source_commit": null,
+  "deployment_tx": null,
+  "deployment_timestamp": null,
+  "status": "PARTIALLY_VERIFIED",
+  "transactions": {
+    "register_plan": "0x35c93fc352aea95a32ff1d7bd89be118780979e9086831bd5d3ae70b83af42ed",
+    "open_subscription": "0xc493922f283cece46d1ba22be2fd8fd67acfbdac4eef77c4188f1c84fd735e0f",
+    "submit_observation": "0xd5ce7cd4385ba3b5fc6d7b259312f033eefcb8a2a3f8d638c04eb1e41d26cffc",
+    "classify_observation": "0x99b57b87aa6524ec3b19d1ce3df821f10fd183585b38d80246e4c55742d089fa",
+    "request_cancellation": "0x66477086de0e86b5021f7ce008f07d76b020f98da26d8f675a257bb7ef768e96",
+    "settle": "0x29a72b7f609b44ced3e2cceedb63dbe2e9d93d7aad16011bc7e2aa4736fcd44e"
+  },
+  "readback": {
+    "counts": [1, 1, 1],
+    "subscription_0": ["SLA_MET", "10000000000000000", "0", "10000000000000000", "0"]
+  },
+  "notes": "Happy path verified through settlement. Partial/full refund, unauthorized, wrong-value, replay, and balance-delta scenarios remain to be exercised on-chain."
+}
