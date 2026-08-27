@@ -15,9 +15,6 @@
     "request_cancellation": "0xa676c57a2944b90b4104ff51470cfa57b19ac48585204f71670ae08b62f4154a",
     "settle": "0xaeb379e3d4240490beb5424aaa6f5545aad30bf1a6105a2d5f546aff4425b4df"
   },
-  "readback": {
-    "counts": [1, 1, 1],
-    "subscription_0": ["SLA_MET", "10000000000000000", "0", "10000000000000000", "0"]
-  },
-  "notes": "Deployment transaction and timestamp were independently read from the public GenLayer Explorer transaction API. Happy path verified through settlement. The recorded source commit was created after this deployment, so exact source/deployment parity is not claimed. Partial/full refund, unauthorized, wrong-value, replay, and balance-delta scenarios remain to be exercised on-chain."
+  "readback": null,
+  "notes": "Deployment and lifecycle transaction hashes were independently read from the public GenLayer Explorer transaction API for this deployment. The lifecycle reached settlement. Readback RPC output was not captured in this run, so no final state values are claimed. Partial/full refund, unauthorized, wrong-value, replay, and balance-delta scenarios remain to be exercised on-chain."
 }
