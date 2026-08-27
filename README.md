@@ -54,5 +54,6 @@ The current source revision adds settlement-party authorization and a confirmed
 observation counter. The current Studionet deployment is
 `0x8e9F27CB90ec042Ff157DDB4b97f0CfD95853140`; its deployment and lifecycle
 transactions are recorded in `deployments/studionet.json`. The happy path and
-negative transaction submissions are documented; refund-band outcomes are not
-claimed unless independently confirmed on-chain.
+negative transaction submissions are documented. A partial-refund settlement has
+now been independently confirmed on-chain with a 70/30 provider/subscriber
+transfer split; full-refund evidence is not claimed.
