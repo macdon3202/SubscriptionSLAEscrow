@@ -3,7 +3,7 @@
   "chain_id": 61999,
   "contract_address": "0x0C5059BA47A9994103bEe6eb8c5B0D65B6bdA701",
   "source_file": "contracts/SubscriptionSLAEscrow.py",
-  "source_commit": null,
+  "source_commit": "f6e0748e2d2bc19973e81bceb1157dd81e449ed6",
   "deployment_tx": null,
   "deployment_timestamp": null,
   "status": "PARTIALLY_VERIFIED",
@@ -19,5 +19,5 @@
     "counts": [1, 1, 1],
     "subscription_0": ["SLA_MET", "10000000000000000", "0", "10000000000000000", "0"]
   },
-  "notes": "Happy path verified through settlement. Partial/full refund, unauthorized, wrong-value, replay, and balance-delta scenarios remain to be exercised on-chain."
+  "notes": "Happy path verified through settlement. Deployment transaction hash is not exposed by the queried RPC method. Partial/full refund, unauthorized, wrong-value, replay, and balance-delta scenarios remain to be exercised on-chain."
 }
