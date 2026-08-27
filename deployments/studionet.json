@@ -1,19 +1,19 @@
 {
   "network": "studionet",
   "chain_id": 61999,
-  "contract_address": "0x0C5059BA47A9994103bEe6eb8c5B0D65B6bdA701",
+  "contract_address": "0x8e9F27CB90ec042Ff157DDB4b97f0CfD95853140",
   "source_file": "contracts/SubscriptionSLAEscrow.py",
   "source_commit": "f6e0748e2d2bc19973e81bceb1157dd81e449ed6",
-  "deployment_tx": "0xb8a13a3b06b86658eecfb759d675f893419b6890559fc6982aa9ee6438fea86c",
-  "deployment_timestamp": "2026-08-27T21:37:41+07:00",
+  "deployment_tx": "0x8695dacd5cdc695435cb9382e63d9b59c50e068062e9e0c16ae74ff74c050316",
+  "deployment_timestamp": "2026-08-27T22:01:53+07:00",
   "status": "PARTIALLY_VERIFIED",
   "transactions": {
-    "register_plan": "0x35c93fc352aea95a32ff1d7bd89be118780979e9086831bd5d3ae70b83af42ed",
-    "open_subscription": "0xc493922f283cece46d1ba22be2fd8fd67acfbdac4eef77c4188f1c84fd735e0f",
-    "submit_observation": "0xd5ce7cd4385ba3b5fc6d7b259312f033eefcb8a2a3f8d638c04eb1e41d26cffc",
-    "classify_observation": "0x99b57b87aa6524ec3b19d1ce3df821f10fd183585b38d80246e4c55742d089fa",
-    "request_cancellation": "0x66477086de0e86b5021f7ce008f07d76b020f98da26d8f675a257bb7ef768e96",
-    "settle": "0x29a72b7f609b44ced3e2cceedb63dbe2e9d93d7aad16011bc7e2aa4736fcd44e"
+    "register_plan": "0xad29e751b35a9093b70a2ef9fce5173d8037ebc7b514c9efb5a8d31978b63977",
+    "open_subscription": "0xd13375700dee2f7aa403d5f927b0425d24b9fe3b376593ed9895ef259adda6d3",
+    "submit_observation": "0xbd819d6407fc38bc05583c7ceae710c739024de5d6abaf847271e3f46fdf6fe2",
+    "classify_observation": "0x656be9ca67a3dc672d33c2290b6a71146d4718543c87f4f64eb09de032e40302",
+    "request_cancellation": "0xa676c57a2944b90b4104ff51470cfa57b19ac48585204f71670ae08b62f4154a",
+    "settle": "0xaeb379e3d4240490beb5424aaa6f5545aad30bf1a6105a2d5f546aff4425b4df"
   },
   "readback": {
     "counts": [1, 1, 1],
