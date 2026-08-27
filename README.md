@@ -51,7 +51,8 @@ npm run build
 ```
 
 The current source revision adds settlement-party authorization and a confirmed
-observation counter. A Studionet deployment at
-`0x0C5059BA47A9994103bEe6eb8c5B0D65B6bdA701` has a verified happy path through
-`SLA_MET` settlement. See `deployments/studionet.json`; adversarial and refund-band
-coverage is intentionally not claimed until those scenarios are run.
+observation counter. The current Studionet deployment is
+`0x8e9F27CB90ec042Ff157DDB4b97f0CfD95853140`; its deployment and lifecycle
+transactions are recorded in `deployments/studionet.json`. The happy path and
+negative transaction submissions are documented; refund-band outcomes are not
+claimed unless independently confirmed on-chain.
