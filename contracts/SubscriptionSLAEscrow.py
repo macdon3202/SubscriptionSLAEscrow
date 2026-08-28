@@ -25,6 +25,8 @@ class SubscriptionSLAEscrow(gl.Contract):
     plan_full_minutes: TreeMap[u256, u256]
     plan_response_ms: TreeMap[u256, u256]
     plan_request_limit: TreeMap[u256, u256]
+    plan_service: TreeMap[u256, str]
+    plan_sources: TreeMap[str, u256]
     subscription_plan: TreeMap[u256, u256]
     subscription_subscriber: TreeMap[u256, str]
     subscription_status: TreeMap[u256, str]
@@ -34,6 +36,9 @@ class SubscriptionSLAEscrow(gl.Contract):
     subscription_confirmed: TreeMap[u256, u256]
     subscription_paid: TreeMap[u256, u256]
     subscription_refunded: TreeMap[u256, u256]
+    subscription_window_start: TreeMap[u256, u256]
+    subscription_window_end: TreeMap[u256, u256]
+    subscription_window_closed: TreeMap[u256, u256]
     observation_subscription: TreeMap[u256, u256]
     observation_submitter: TreeMap[u256, str]
     observation_url: TreeMap[u256, str]
@@ -42,6 +47,8 @@ class SubscriptionSLAEscrow(gl.Contract):
     observation_outage: TreeMap[u256, u256]
     observation_minutes: TreeMap[u256, u256]
     observation_reason: TreeMap[u256, str]
+    observation_service: TreeMap[u256, str]
+    observation_observed_at: TreeMap[u256, u256]
     used_digests: TreeMap[str, str]
 
     def __init__(self):
@@ -69,11 +76,37 @@ class SubscriptionSLAEscrow(gl.Contract):
         self.plan_full_minutes[plan_id] = full_minutes
         self.plan_response_ms[plan_id] = response_ms
         self.plan_request_limit[plan_id] = request_limit
+        self.plan_service[plan_id] = "UNBOUND"
         self.plan_count = plan_id + u256(1)
         return plan_id
 
+    @gl.public.write
+    def bind_plan_service(self, plan_id: u256, service_key: str) -> typing.Any:
+        if plan_id >= self.plan_count:
+            return "PLAN_NOT_FOUND"
+        if self.plan_provider[plan_id] != str(gl.message.sender_address):
+            return "PROVIDER_ONLY"
+        if len(service_key) == 0 or len(service_key) > 96:
+            return "INVALID_SERVICE"
+        if self.plan_service[plan_id] != "UNBOUND":
+            return "SERVICE_ALREADY_BOUND"
+        self.plan_service[plan_id] = service_key
+        return "SERVICE_BOUND"
+
+    @gl.public.write
+    def approve_source(self, plan_id: u256, source_url: str) -> typing.Any:
+        if plan_id >= self.plan_count:
+            return "PLAN_NOT_FOUND"
+        if self.plan_provider[plan_id] != str(gl.message.sender_address):
+            return "PROVIDER_ONLY"
+        if len(source_url) == 0 or len(source_url) > 512 or not source_url.startswith("https://"):
+            return "INVALID_SOURCE_URL"
+        key = str(plan_id) + "@" + source_url
+        self.plan_sources[key] = u256(1)
+        return "SOURCE_APPROVED"
+
     @gl.public.write.payable
-    def open_subscription(self, plan_id: u256) -> typing.Any:
+    def open_subscription(self, plan_id: u256, window_start: u256, window_end: u256) -> typing.Any:
         if plan_id >= self.plan_count:
             return "PLAN_NOT_FOUND"
         expected = self.plan_price[plan_id]
@@ -81,6 +114,10 @@ class SubscriptionSLAEscrow(gl.Contract):
             return "ZERO_VALUE"
         if gl.message.value != expected:
             return "WRONG_ESCROW_VALUE"
+        if self.plan_service[plan_id] == "UNBOUND":
+            return "SERVICE_NOT_BOUND"
+        if window_start == u256(0) or window_end <= window_start:
+            return "INVALID_COVERAGE_WINDOW"
         subscription_id = self.subscription_count
         self.subscription_plan[subscription_id] = plan_id
         self.subscription_subscriber[subscription_id] = str(gl.message.sender_address)
@@ -91,12 +128,15 @@ class SubscriptionSLAEscrow(gl.Contract):
         self.subscription_confirmed[subscription_id] = u256(0)
         self.subscription_paid[subscription_id] = u256(0)
         self.subscription_refunded[subscription_id] = u256(0)
+        self.subscription_window_start[subscription_id] = window_start
+        self.subscription_window_end[subscription_id] = window_end
+        self.subscription_window_closed[subscription_id] = u256(0)
         self.subscription_count = subscription_id + u256(1)
         return subscription_id
 
     @gl.public.write
     def submit_observation(self, subscription_id: u256, evidence_url: str,
-                           digest: str) -> typing.Any:
+                           digest: str, observed_at: u256) -> typing.Any:
         if subscription_id >= self.subscription_count:
             return "SUBSCRIPTION_NOT_FOUND"
         if self.subscription_status[subscription_id] not in ("ACTIVE", "CANCELLATION_REQUESTED"):
@@ -105,6 +145,16 @@ class SubscriptionSLAEscrow(gl.Contract):
             return "INVALID_EVIDENCE_URL"
         if len(digest) == 0 or len(digest) > 128 or digest in self.used_digests:
             return "DIGEST_REUSED"
+        if self.subscription_window_closed[subscription_id] == u256(1):
+            return "EVIDENCE_WINDOW_CLOSED"
+        if observed_at < self.subscription_window_start[subscription_id] or observed_at > self.subscription_window_end[subscription_id]:
+            return "OUTSIDE_COVERAGE_WINDOW"
+        plan_id = self.subscription_plan[subscription_id]
+        if self.plan_service[plan_id] == "UNBOUND":
+            return "SERVICE_NOT_BOUND"
+        source_key = str(plan_id) + "@" + evidence_url
+        if source_key not in self.plan_sources:
+            return "SOURCE_NOT_APPROVED"
         observation_id = self.observation_count
         self.observation_subscription[observation_id] = subscription_id
         self.observation_submitter[observation_id] = str(gl.message.sender_address)
@@ -114,6 +164,8 @@ class SubscriptionSLAEscrow(gl.Contract):
         self.observation_outage[observation_id] = u256(0)
         self.observation_minutes[observation_id] = u256(0)
         self.observation_reason[observation_id] = ""
+        self.observation_service[observation_id] = self.plan_service[plan_id]
+        self.observation_observed_at[observation_id] = observed_at
         self.used_digests[digest] = "USED"
         self.observation_count = observation_id + u256(1)
         self.subscription_observations[subscription_id] = self.subscription_observations[subscription_id] + u256(1)
@@ -176,6 +228,37 @@ class SubscriptionSLAEscrow(gl.Contract):
         return "CONFIRMED"
 
     @gl.public.write
+    def resolve_observation(self, observation_id: u256, outage: u256, minutes: u256) -> typing.Any:
+        if observation_id >= self.observation_count:
+            return "OBSERVATION_NOT_FOUND"
+        if self.observation_status[observation_id] != "NEEDS_REVIEW":
+            return "NOT_REVIEWABLE"
+        subscription_id = self.observation_subscription[observation_id]
+        plan_id = self.subscription_plan[subscription_id]
+        if self.plan_provider[plan_id] != str(gl.message.sender_address):
+            return "PROVIDER_ONLY"
+        if outage > u256(1) or minutes > u256(43200):
+            return "INVALID_RESOLUTION"
+        self.observation_outage[observation_id] = outage
+        self.observation_minutes[observation_id] = minutes if outage == u256(1) else u256(0)
+        self.observation_reason[observation_id] = "Provider resolution"
+        self.observation_status[observation_id] = "RESOLVED"
+        self.subscription_downtime[subscription_id] = self.subscription_downtime[subscription_id] + self.observation_minutes[observation_id]
+        self.subscription_confirmed[subscription_id] = self.subscription_confirmed[subscription_id] + u256(1)
+        return "RESOLVED"
+
+    @gl.public.write
+    def close_evidence_window(self, subscription_id: u256) -> typing.Any:
+        if subscription_id >= self.subscription_count:
+            return "SUBSCRIPTION_NOT_FOUND"
+        if self.subscription_subscriber[subscription_id] != str(gl.message.sender_address) and self.plan_provider[self.subscription_plan[subscription_id]] != str(gl.message.sender_address):
+            return "PARTY_ONLY"
+        if self.subscription_window_closed[subscription_id] == u256(1):
+            return "WINDOW_ALREADY_CLOSED"
+        self.subscription_window_closed[subscription_id] = u256(1)
+        return "WINDOW_CLOSED"
+
+    @gl.public.write
     def request_cancellation(self, subscription_id: u256) -> typing.Any:
         if subscription_id >= self.subscription_count:
             return "SUBSCRIPTION_NOT_FOUND"
@@ -196,6 +279,13 @@ class SubscriptionSLAEscrow(gl.Contract):
             return "PARTY_ONLY"
         if self.subscription_confirmed[subscription_id] == u256(0):
             return "NO_EVIDENCE"
+        if self.subscription_window_closed[subscription_id] != u256(1):
+            return "WINDOW_NOT_CLOSED"
+        cursor = u256(0)
+        while cursor < self.observation_count:
+            if self.observation_subscription[cursor] == subscription_id and self.observation_status[cursor] in ("PENDING", "NEEDS_REVIEW"):
+                return "OBSERVATIONS_NOT_RESOLVED"
+            cursor = cursor + u256(1)
         plan_id = self.subscription_plan[subscription_id]
         deposit = self.subscription_deposit[subscription_id]
         downtime = self.subscription_downtime[subscription_id]

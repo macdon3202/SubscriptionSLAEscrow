@@ -13,7 +13,7 @@ def test_header_syntax_and_ascii():
 
 def test_core_rules_are_present():
     text = CONTRACT.read_text(encoding="utf-8")
-    for marker in ["write.payable", "gl.message.value", "prompt_comparative", "response_format=\"json\"", "emit_transfer", "DIGEST_REUSED", "SUBSCRIBER_ONLY"]:
+    for marker in ["write.payable", "gl.message.value", "prompt_comparative", "emit_transfer", "DIGEST_REUSED", "SUBSCRIBER_ONLY", "SOURCE_NOT_APPROVED", "WINDOW_NOT_CLOSED", "OBSERVATIONS_NOT_RESOLVED", "bind_plan_service", "approve_source"]:
         assert marker in text
     assert "dict[" not in text
     assert "list[" not in text

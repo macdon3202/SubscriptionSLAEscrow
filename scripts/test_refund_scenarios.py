@@ -6,9 +6,7 @@ ADDRESS = sys.argv[1]
 PARTIAL_URL = "https://gateway.pinata.cloud/ipfs/bafkreibll5syidsdpjjnjvbq7ip7jdc4xydelbnuswdwny7f6men4j72be"
 FULL_URL = "https://gateway.pinata.cloud/ipfs/bafkreicemhvo2lohpi7yrlletmiap22qtuy2b6aqsjjo7niz44lilgp7qu"
 WEI = 10**16
-provider = create_account(os.environ["SERVICE_LEDGER_KEY_A"])
-subscriber = create_account(os.environ["SERVICE_LEDGER_KEY_B"])
-client = create_client(chain=studionet, account=provider, endpoint="https://studio.genlayer.com/api")
+provider = subscriber = client = None
 
 def wait(tx, label):
     for _ in range(160):
@@ -34,5 +32,9 @@ def scenario(name, url, plan_id):
     wait(send(subscriber, "request_cancellation", [plan_id]), name + ":cancel")
     wait(send(provider, "settle", [plan_id]), name + ":settle")
 
-scenario("partial-fixture-20260827", PARTIAL_URL, 1)
-scenario("full-fixture-20260827", FULL_URL, 2)
+if __name__ == "__main__":
+    provider = create_account(os.environ["SERVICE_LEDGER_KEY_A"])
+    subscriber = create_account(os.environ["SERVICE_LEDGER_KEY_B"])
+    client = create_client(chain=studionet, account=provider, endpoint="https://studio.genlayer.com/api")
+    scenario("partial-fixture-20260827", PARTIAL_URL, 1)
+    scenario("full-fixture-20260827", FULL_URL, 2)

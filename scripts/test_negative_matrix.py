@@ -2,12 +2,8 @@ import json, os, sys, time
 from genlayer_py import create_account, create_client
 from genlayer_py.chains import studionet
 
-ADDRESS = sys.argv[1]
-KEY_A = os.environ["SERVICE_LEDGER_KEY_A"]
-KEY_B = os.environ["SERVICE_LEDGER_KEY_B"]
-provider = create_account(KEY_A)
-subscriber = create_account(KEY_B)
-client = create_client(chain=studionet, account=provider, endpoint="https://studio.genlayer.com/api")
+ADDRESS = sys.argv[1] if len(sys.argv) > 1 else ""
+provider = subscriber = client = None
 
 def run(account, method, args, value=0):
     tx = client.write_contract(address=ADDRESS, function_name=method, account=account, args=args, value=value)
@@ -23,7 +19,15 @@ def run(account, method, args, value=0):
             return
         time.sleep(3)
 
-run(provider, "settle", [0])
-run(provider, "request_cancellation", [0])
-run(subscriber, "open_subscription", [0], 1)
-run(subscriber, "classify_observation", [0])
+def main():
+    global provider, subscriber, client
+    provider = create_account(os.environ["SERVICE_LEDGER_KEY_A"])
+    subscriber = create_account(os.environ["SERVICE_LEDGER_KEY_B"])
+    client = create_client(chain=studionet, account=provider, endpoint="https://studio.genlayer.com/api")
+    run(provider, "settle", [0])
+    run(provider, "request_cancellation", [0])
+    run(subscriber, "open_subscription", [0], 1)
+    run(subscriber, "classify_observation", [0])
+
+if __name__ == "__main__":
+    main()
