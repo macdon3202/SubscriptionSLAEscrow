@@ -5,6 +5,7 @@ from genlayer_py.chains import studionet
 ADDRESS = sys.argv[1]
 PLAN_ID = int(os.environ.get("SERVICE_LEDGER_PLAN_ID", "0"))
 SUBSCRIPTION_ID = int(os.environ.get("SERVICE_LEDGER_SUBSCRIPTION_ID", "0"))
+OBSERVATION_ID = int(os.environ.get("SERVICE_LEDGER_OBSERVATION_ID", str(SUBSCRIPTION_ID)))
 provider = subscriber = client = None
 
 def wait(tx, label):
@@ -34,9 +35,9 @@ def main():
     wait(send(provider, "approve_source", [PLAN_ID, "https://example.com/404"]), "SOURCE")
     wait(send(subscriber, "open_subscription", [PLAN_ID, 100, 200], 10**16), "OPEN")
     wait(send(subscriber, "submit_observation", [SUBSCRIPTION_ID, "https://example.com/404", "sha256:review-resolution-20260828", 150]), "OBSERVE")
-    result = wait(send(provider, "classify_observation", [SUBSCRIPTION_ID]), "CLASSIFY")
+    result = wait(send(provider, "classify_observation", [OBSERVATION_ID]), "CLASSIFY")
     if result == "NEEDS_REVIEW":
-        wait(send(provider, "resolve_observation", [SUBSCRIPTION_ID, 0, 0]), "RESOLVE")
+        wait(send(provider, "resolve_observation", [OBSERVATION_ID, 1, 20]), "RESOLVE")
     wait(send(subscriber, "close_evidence_window", [SUBSCRIPTION_ID]), "CLOSE")
     wait(send(subscriber, "request_cancellation", [SUBSCRIPTION_ID]), "CANCEL")
     wait(send(provider, "settle", [SUBSCRIPTION_ID]), "SETTLE")

@@ -24,17 +24,20 @@ def wait(tx, label):
 def send(account, method, args, value=0):
     return client.write_contract(address=ADDRESS, function_name=method, account=account, args=args, value=value)
 
-def scenario(name, url, plan_id):
+def scenario(name, url, plan_id, subscription_id, observation_id):
     wait(send(provider, "register_plan", [name, WEI, 10, 60, 1000, 100000]), name + ":plan")
-    wait(send(subscriber, "open_subscription", [plan_id], WEI), name + ":open")
-    wait(send(subscriber, "submit_observation", [plan_id, url, name]), name + ":observation")
-    wait(send(provider, "classify_observation", [plan_id]), name + ":classify")
-    wait(send(subscriber, "request_cancellation", [plan_id]), name + ":cancel")
-    wait(send(provider, "settle", [plan_id]), name + ":settle")
+    wait(send(provider, "bind_plan_service", [plan_id, name]), name + ":bind")
+    wait(send(provider, "approve_source", [plan_id, url]), name + ":source")
+    wait(send(subscriber, "open_subscription", [plan_id, 100, 200], WEI), name + ":open")
+    wait(send(subscriber, "submit_observation", [subscription_id, url, name, 150]), name + ":observation")
+    wait(send(provider, "classify_observation", [observation_id]), name + ":classify")
+    wait(send(subscriber, "close_evidence_window", [subscription_id]), name + ":close")
+    wait(send(subscriber, "request_cancellation", [subscription_id]), name + ":cancel")
+    wait(send(provider, "settle", [subscription_id]), name + ":settle")
 
 if __name__ == "__main__":
     provider = create_account(os.environ["SERVICE_LEDGER_KEY_A"])
     subscriber = create_account(os.environ["SERVICE_LEDGER_KEY_B"])
     client = create_client(chain=studionet, account=provider, endpoint="https://studio.genlayer.com/api")
-    scenario("partial-fixture-20260827", PARTIAL_URL, 1)
-    scenario("full-fixture-20260827", FULL_URL, 2)
+    scenario("partial-fixture-20260827", PARTIAL_URL, 1, 1, 1)
+    scenario("full-fixture-20260827", FULL_URL, 2, 2, 2)
