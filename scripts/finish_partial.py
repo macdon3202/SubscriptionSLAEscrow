@@ -15,9 +15,6 @@ def main():
                 print(json.dumps({"method": method, "tx": str(tx), "status": status, "result": info.get("result_name") or info.get("result")}, sort_keys=True), flush=True)
                 return
             time.sleep(3)
-    send(p, "classify_observation", [2])
-    send(p, "resolve_observation", [2, 1, 20])
-    send(s, "close_evidence_window", [3])
-    send(s, "request_cancellation", [3])
-    send(p, "settle", [3])
+    send(p, "resolve_observation", [3, 1, 20])
+    send(p, "settle", [4])
 if __name__ == "__main__": main()

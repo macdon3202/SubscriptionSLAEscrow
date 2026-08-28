@@ -1,0 +1,12 @@
+{
+  "incident_id": "svc-2026-08-28-001",
+  "service": "review-test-service",
+  "status": "resolved",
+  "incident_type": "availability_outage",
+  "outage": true,
+  "duration_minutes": 20,
+  "started_at": "2026-08-28T08:00:00Z",
+  "resolved_at": "2026-08-28T08:20:00Z",
+  "summary": "The service was unavailable for 20 minutes and recovered after remediation.",
+  "source": "Subscription SLA Escrow integration test incident report"
+}
