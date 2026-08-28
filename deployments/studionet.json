@@ -1,30 +1,27 @@
 {
   "network": "studionet",
   "chain_id": 61999,
-  "contract_address": "0x8e9F27CB90ec042Ff157DDB4b97f0CfD95853140",
+  "contract_address": "0x00d30a829e5a51c88155a94020F2B7E5918363b3",
   "source_file": "contracts/SubscriptionSLAEscrow.py",
-  "source_commit": "f6e0748e2d2bc19973e81bceb1157dd81e449ed6",
-  "deployment_tx": "0x8695dacd5cdc695435cb9382e63d9b59c50e068062e9e0c16ae74ff74c050316",
-  "deployment_timestamp": "2026-08-27T22:01:53+07:00",
-  "status": "PARTIAL_REFUND_VERIFIED",
+  "source_commit": "2d7a4be7df885354d14c80e64165b07d6ad60b3f",
+  "deployment_tx": "0x1a19d45fbc3f5a1be2b7e572d67fe272d8ecac2a4b0d39fff1a85248c24a73e3",
+  "deployment_timestamp": "2026-08-28T14:37:22+07:00",
+  "status": "VERIFIED_HAPPY_PATH",
   "transactions": {
-    "register_plan": "0xad29e751b35a9093b70a2ef9fce5173d8037ebc7b514c9efb5a8d31978b63977",
-    "open_subscription": "0xd13375700dee2f7aa403d5f927b0425d24b9fe3b376593ed9895ef259adda6d3",
-    "submit_observation": "0xbd819d6407fc38bc05583c7ceae710c739024de5d6abaf847271e3f46fdf6fe2",
-    "classify_observation": "0x656be9ca67a3dc672d33c2290b6a71146d4718543c87f4f64eb09de032e40302",
-    "request_cancellation": "0xa676c57a2944b90b4104ff51470cfa57b19ac48585204f71670ae08b62f4154a",
-    "settle": "0xaeb379e3d4240490beb5424aaa6f5545aad30bf1a6105a2d5f546aff4425b4df",
-    "negative_settle_replay": "0xff9e7abee9be2c21155eaea0d3b3263974e1d6bfdfc813178b042b43f5a39dd6",
-    "negative_cancel_non_subscriber": "0x8678212ce0dc50d1c470b64ef2a0bf13d763fc56d7cb6373ad7f859fcfe49b92",
-    "negative_wrong_value": "0xd8a5b315a5cd0e0e8ad2c903b6646f49900fd6622c2988dc959c550f7b0c85fb",
-    "negative_classify_replay": "0x2e7d3df57505c5ff6c79cc492f0f73fdb1f481ac439b98567e2d6612e7dc724d",
-    "partial_observation": "0xe3488245de44ef6c5af486971513102b63267b8d7756d1a461b6af6b654e47ad",
-    "partial_classify": "0xc7cceb4719aacb524890035574653a5486477697a4ca7a3fb556257b6d82e36",
-    "partial_cancellation": "0xa1ee84de34b1283deecbe6252bb0cdf126da5afb49435b570192d725e2a8112a",
-    "partial_settle": "0x8dc3869b92c0f726760bc5751dd2ecc30c35260a5fd291622cf2b8a6303d6abe",
-    "partial_provider_payout": "0x7f00fcde7601e8706bba83e0d99477383cbd364b11be7905962e81adacbd60c1",
-    "partial_subscriber_refund": "0x557b1f0b4d55425e6f699cd801d081b83c1ee258b8c2776ed3205435b29394c6"
+    "register_plan": "0x8de54b3d92afd4b83c6b30624732023e6f5db0d4554a173a83a7e53403cf9b3e",
+    "bind_plan_service": "0x4491f153769e8639af6cfb59a2e439d27aabc0105c69df0af43738e0ae6a9786",
+    "approve_source": "0x28049b2dcfed1bd3d1cf3ec39b6c9f65dd2a924217359010c73e7ea702b49f38",
+    "open_subscription": "0xb860cf8c6cfb47b08d47ac247b141466eef54ffb599e37cf04bab45310ac2a9a",
+    "submit_observation": "0x61095bef8470328178ddb58d4f79c50ded44ce3f774078ff001702453a0b6b0a",
+    "classify_observation": "0x5b4f76849b721f7daa5b49bcf46e46c5b3276450bf1f7a2a75532aa5320f5a17",
+    "close_evidence_window": "0x9ba4761c6eb4cb44150cd8a28c0f8027ddf2b8dd297559e69f92ec1894ec1554",
+    "request_cancellation": "0xb2c95487871764352186ebb95de54738618e249e94fb50317429354a62f0f5af",
+    "settle": "0x3f1b5d04c522394792dde6779f8badb6af02382abf6da63d346d675e67af6adb",
+    "provider_transfer": "0x0b0d043fb418ee4fbd78d134e434a2d7e92dc8261ee22bd2d8010df107815d65"
   },
-  "readback": null,
-  "notes": "Deployment, lifecycle, negative-test, and partial-refund transaction hashes were independently read from the public GenLayer Explorer. The partial settlement emitted 7000000000000000 wei-equivalent GEN to the provider and 3000000000000000 to the subscriber from a 10000000000000000 deposit, matching the 70/30 policy. Full-refund, decoded return strings, and independent balance-delta readback are not claimed."
+  "balance": {
+    "contract_after_settlement": "0 GEN",
+    "provider_transfer_wei": "10000000000000000"
+  },
+  "notes": "All lifecycle transactions are FINALIZED. The verified flow binds the plan to a service, allowlists its evidence source, enforces an observation coverage window, closes that window before cancellation and settlement, and pays the provider after a confirmed no-outage observation. Review-resolution and refund branches are not claimed for this deployment."
 }

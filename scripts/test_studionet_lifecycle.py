@@ -5,7 +5,7 @@ from genlayer_py.chains import studionet
 ADDRESS = sys.argv[1] if len(sys.argv) > 1 else os.environ.get("SUBSCRIPTION_ESCROW_ADDRESS", "")
 WEI = 10**16
 URL = "https://example.com/"
-DIGEST = "sha256:example-status-observation-20260827"
+DIGEST = "sha256:example-status-observation-20260828"
 
 def wait(client, tx, label):
     last = None
@@ -38,11 +38,14 @@ def main():
         return tx
     def read(method, args):
         return client.read_contract(address=ADDRESS, function_name=method, args=args, account=provider)
-    plan = wait(client, send(provider, "register_plan", ["RPC Standard", WEI, 30, 120, 1000, 100000]), "PLAN")
-    sub = wait(client, send(subscriber, "open_subscription", [0], WEI), "SUBSCRIPTION")
-    obs = wait(client, send(subscriber, "submit_observation", [0, URL, DIGEST]), "OBSERVATION")
+    wait(client, send(provider, "register_plan", ["RPC Standard", WEI, 30, 120, 1000, 100000]), "PLAN")
+    wait(client, send(provider, "bind_plan_service", [0, "rpc-standard"]), "BIND_SERVICE")
+    wait(client, send(provider, "approve_source", [0, URL]), "APPROVE_SOURCE")
+    wait(client, send(subscriber, "open_subscription", [0, 100, 200], WEI), "SUBSCRIPTION")
+    wait(client, send(subscriber, "submit_observation", [0, URL, DIGEST, 150]), "OBSERVATION")
     classify = wait(client, send(provider, "classify_observation", [0]), "CLASSIFY")
     print(json.dumps({"event":"AFTER_CLASSIFY", "subscription":read("read_subscription", [0])}, default=str, sort_keys=True), flush=True)
+    wait(client, send(subscriber, "close_evidence_window", [0]), "CLOSE_WINDOW")
     wait(client, send(subscriber, "request_cancellation", [0]), "CANCEL")
     wait(client, send(provider, "settle", [0]), "SETTLE")
     print(json.dumps({"event":"FINAL_READBACK", "subscription":read("read_subscription", [0])}, default=str, sort_keys=True), flush=True)
