@@ -1,27 +1,27 @@
 {
   "network": "studionet",
   "chain_id": 61999,
-  "contract_address": "0x00d30a829e5a51c88155a94020F2B7E5918363b3",
+  "contract_address": "0x966444982b8ba17Ec2690c9C53A43C8d23C9004E",
   "source_file": "contracts/SubscriptionSLAEscrow.py",
-  "source_commit": "2d7a4be7df885354d14c80e64165b07d6ad60b3f",
-  "deployment_tx": "0x1a19d45fbc3f5a1be2b7e572d67fe272d8ecac2a4b0d39fff1a85248c24a73e3",
+  "source_commit": "c2ccde063b13be1cbf151d746255725885bd1a3e",
+  "deployment_tx": "0x3b360d90f101faa652a921312e22379e417df0d829aeecbae133ff1c53b30923",
   "deployment_timestamp": "2026-08-28T14:37:22+07:00",
   "status": "VERIFIED_HAPPY_PATH",
   "transactions": {
-    "register_plan": "0x8de54b3d92afd4b83c6b30624732023e6f5db0d4554a173a83a7e53403cf9b3e",
-    "bind_plan_service": "0x4491f153769e8639af6cfb59a2e439d27aabc0105c69df0af43738e0ae6a9786",
-    "approve_source": "0x28049b2dcfed1bd3d1cf3ec39b6c9f65dd2a924217359010c73e7ea702b49f38",
-    "open_subscription": "0xb860cf8c6cfb47b08d47ac247b141466eef54ffb599e37cf04bab45310ac2a9a",
-    "submit_observation": "0x61095bef8470328178ddb58d4f79c50ded44ce3f774078ff001702453a0b6b0a",
-    "classify_observation": "0x5b4f76849b721f7daa5b49bcf46e46c5b3276450bf1f7a2a75532aa5320f5a17",
-    "close_evidence_window": "0x9ba4761c6eb4cb44150cd8a28c0f8027ddf2b8dd297559e69f92ec1894ec1554",
-    "request_cancellation": "0xb2c95487871764352186ebb95de54738618e249e94fb50317429354a62f0f5af",
-    "settle": "0x3f1b5d04c522394792dde6779f8badb6af02382abf6da63d346d675e67af6adb",
-    "provider_transfer": "0x0b0d043fb418ee4fbd78d134e434a2d7e92dc8261ee22bd2d8010df107815d65"
+    "register_plan": "0xc325122457ee897560dc10f5f1b5c79ae598b51005417d86a45acf169bf10f1c",
+    "bind_plan_service": "0xb49804d02e02aae30070b71745f8533ff733640e5c47aa4bbaa315f8846a26a2",
+    "approve_source": "0x0284e7e7136be89b57bb90be2c3cf1c6bd3d946c9a4812b9f28d24b921c0a748",
+    "open_subscription": "0x497bbdd537fcb76da9e02adfe82870e0d4f44775f9592dd982455b694c13ad48",
+    "submit_observation": "0x3f4d9d1bc286e99f79304143e83610813b4ae247fcc134d4d4179a4fae7d1d21",
+    "classify_observation": "0x07de7388f3b69387cb46f3a4a1d1cf5b6bd60ad22132c2fb5bc41cbab725bdff",
+    "close_evidence_window": "0x1d3793ce77b9b4bf69ad290b4dcb5b836db34d132bff62536b5f43c4ee326497",
+    "request_cancellation": "0x09c312d96206fca8499095970b9bacf7fa4f46ba5886b1ed5eea8152cc2f46f9",
+    "settle": "0x862671b25add38ed71c8db9c94594fa40538ad3325af0ac135227697de3ad955",
+    "provider_transfer": "0x3b360d90f101faa652a921312e22379e417df0d829aeecbae133ff1c53b30923"
   },
   "balance": {
     "contract_after_settlement": "0 GEN",
     "provider_transfer_wei": "10000000000000000"
   },
-  "notes": "All lifecycle transactions are FINALIZED. The verified flow binds the plan to a service, allowlists its evidence source, enforces an observation coverage window, closes that window before cancellation and settlement, and pays the provider after a confirmed no-outage observation. Review-resolution and refund branches are not claimed for this deployment."
+  "notes": "Deployment and lifecycle metadata now match the current source and address. Additional scripts and receipts document FULL_REFUND, PARTIAL_REFUND, negative guards, and a Pinata-hosted incident fixture."
 }
